@@ -1,0 +1,11 @@
+<!-- templates/decision_rechazo.html -->
+{% extends "base.html" %}
+{% block title %}Rechazar factura {{ factura.numero }}{% endblock %}
+{% block content %}
+<h2>Rechazar factura #{{ factura.numero }}</h2>
+<form action="/facturas/{{ factura.id }}/rechazo" method="post" class="card">
+  <label>Comentario de rechazo</label>
+  <textarea name="comentario" rows="4" placeholder="Explica la razón" required></textarea>
+  <button type="submit" class="btn reject">Confirmar rechazo</button>
+</form>
+{% endblock %}

@@ -1,0 +1,15 @@
+<!-- templates/subir.html -->
+{% extends "base.html" %}
+{% block title %}Subir factura{% endblock %}
+{% block content %}
+<h2>Subir factura (imagen)</h2>
+<form action="/facturas" method="post" enctype="multipart/form-data" class="card">
+  <label>Selecciona imagen (.png, .jpg, .jpeg)</label>
+  <input type="file" name="file" accept=".png,.jpg,.jpeg" required>
+
+  <label>Email para notificación (opcional)</label>
+  <input type="email" name="destinatario_email" placeholder="usuario@correo.com">
+
+  <button type="submit" class="btn">Procesar</button>
+</form>
+{% endblock %}
