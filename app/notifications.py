@@ -3,10 +3,10 @@ import smtplib
 from email.mime.text import MIMEText
 from email.utils import formataddr
 
-SMTP_HOST = "smtp.gmail.com"         # Cambia según tu proveedor
+SMTP_HOST = "smtp.gmail.com"        
 SMTP_PORT = 587
-SMTP_USER = "tu_correo@gmail.com"    # Configura variables de entorno en producción
-SMTP_PASS = "tu_password_app"        # Usa contraseña de aplicación (Gmail)
+SMTP_USER = "?"   
+SMTP_PASS = "?"        
 
 def enviar_notificacion(destinatario: str, asunto: str, html_contenido: str):
     msg = MIMEText(html_contenido, "html", "utf-8")

@@ -53,3 +53,12 @@ def actualizar_estado(db: Session, factura: Factura, nuevo_estado: str, comentar
     db.commit()
     db.refresh(factura)
     return factura
+
+def borrar_factura(db: Session, factura_id: int) -> bool:
+    from .models import Factura
+    factura = db.query(Factura).filter(Factura.id == factura_id).first()
+    if not factura:
+        return False
+    db.delete(factura)
+    db.commit()
+    return True

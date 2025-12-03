@@ -1,30 +1,50 @@
-<!-- templates/listado.html -->
-{% extends "base.html" %}
-{% block title %}Listado de facturas{% endblock %}
-{% block content %}
-<h2>Listado de facturas</h2>
-<table class="table">
-  <thead>
-    <tr>
-      <th>ID</th><th>Número</th><th>Proveedor</th><th>Monto</th><th>Estado</th><th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for f in facturas %}
-    <tr>
-      <td>{{ f.id }}</td>
-      <td>{{ f.numero }}</td>
-      <td>{{ f.proveedor }}</td>
-      <td>{{ "%.2f"|format(f.monto_total) }}</td>
-      <td><span class="badge">{{ f.estado.value }}</span></td>
-      <td>
-        <a class="btn" href="/facturas/{{ f.id }}">Ver</a>
-      </td>
-    </tr>
-    {% endfor %}
-    {% if facturas|length == 0 %}
-    <tr><td colspan="6" style="text-align:center;">No hay facturas aún</td></tr>
-    {% endif %}
-  </tbody>
-</table>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Listado de Facturas</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn { padding: 6px 12px; margin: 2px; border: none; cursor: pointer; }
+        .approve { background-color: #4CAF50; color: white; }
+        .reject { background-color: #f44336; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Listado de Facturas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Número</th>
+                <th>Proveedor</th>
+                <th>Monto</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in facturas %}
+            <tr>
+                <td>{{ f.id }}</td>
+                <td>{{ f.numero }}</td>
+                <td>{{ f.proveedor }}</td>
+                <td>{{ "%.2f"|format(f.monto_total) }}</td>
+                <td>{{ f.estado }}</td>
+                <td>
+                    <a href="/facturas/{{ f.id }}">Ver</a>
+                    <form action="/facturas/{{ f.id }}/borrar" method="post" style="display:inline;">
+                        <button type="submit" class="btn reject"
+                                onclick="return confirm('¿Seguro que quieres borrar esta factura?');">
+                            Borrar
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

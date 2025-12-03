@@ -6,7 +6,18 @@ from sqlalchemy.orm import Session
 from . import database, crud, ocr, schemas
 from .notifications import enviar_notificacion, plantilla_factura
 from .workflows import transicionar_estado
+from fastapi.responses import RedirectResponse
 
+router = APIRouter()
+
+@router.post("/facturas/{factura_id}/borrar")
+def borrar_factura(request: Request, factura_id: int):
+    db = _db()
+    ok = crud.borrar_factura(db, factura_id)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Factura no encontrada")
+    # Redirige al listado después de borrar
+    return RedirectResponse(url="/facturas", status_code=303)
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 

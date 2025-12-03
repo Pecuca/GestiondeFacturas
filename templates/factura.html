@@ -1,20 +1,47 @@
-<!-- templates/factura.html -->
-{% extends "base.html" %}
-{% block title %}Factura {{ factura.numero }}{% endblock %}
-{% block content %}
-<h2>Factura #{{ factura.numero }}</h2>
-<table class="table">
-  <tr><th>Proveedor</th><td>{{ factura.proveedor }}</td></tr>
-  <tr><th>Monto total</th><td>{{ "%.2f"|format(factura.monto_total) }}</td></tr>
-  <tr><th>Impuestos</th><td>{{ "%.2f"|format(factura.impuestos or 0) }}</td></tr>
-  <tr><th>Fecha emisión</th><td>{{ factura.fecha_emision }}</td></tr>
-  <tr><th>Fecha vencimiento</th><td>{{ factura.fecha_vencimiento or "-" }}</td></tr>
-  <tr><th>Estado</th><td><span class="badge">{{ factura.estado.value }}</span></td></tr>
-  <tr><th>Comentario</th><td>{{ factura.comentario or "-" }}</td></tr>
-</table>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Factura {{ factura.numero }}</title>
+    <style>
+        table { border-collapse: collapse; width: 60%; margin-bottom: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn { padding: 6px 12px; margin: 2px; border: none; cursor: pointer; }
+        .approve { background-color: #4CAF50; color: white; }
+        .reject { background-color: #f44336; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Factura {{ factura.numero }}</h1>
+    <table>
+        <tr><th>Proveedor</th><td>{{ factura.proveedor }}</td></tr>
+        <tr><th>Número</th><td>{{ factura.numero }}</td></tr>
+        <tr><th>Fecha emisión</th><td>{{ factura.fecha_emision.strftime('%d/%m/%Y') }}</td></tr>
+        <tr><th>Monto total</th><td>{{ "%.2f"|format(factura.monto_total) }}</td></tr>
+        <tr><th>Impuestos</th><td>{{ "%.2f"|format(factura.impuestos) }}</td></tr>
+        {% if factura.fecha_vencimiento %}
+        <tr><th>Fecha vencimiento</th><td>{{ factura.fecha_vencimiento.strftime('%d/%m/%Y') }}</td></tr>
+        {% endif %}
+        <tr><th>Estado</th><td>{{ factura.estado }}</td></tr>
+        {% if factura.comentario %}
+        <tr><th>Comentario</th><td>{{ factura.comentario }}</td></tr>
+        {% endif %}
+    </table>
 
-<div class="actions">
-  <a href="/facturas/{{ factura.id }}/decision?estado=Aprobado" class="btn">Aprobar</a>
-  <a href="/facturas/{{ factura.id }}/rechazo" class="btn reject">Rechazar</a>
-</div>
-{% endblock %}
+    <form action="/facturas/{{ factura.id }}/decision?estado=Aprobado" method="post" style="display:inline;">
+        <button type="submit" class="btn approve">Aprobar</button>
+    </form>
+
+    <form action="/facturas/{{ factura.id }}/rechazo" method="get" style="display:inline;">
+        <button type="submit" class="btn reject">Rechazar</button>
+    </form>
+
+    <form action="/facturas/{{ factura.id }}/borrar" method="post" style="display:inline;">
+        <button type="submit" class="btn reject"
+                onclick="return confirm('¿Seguro que quieres borrar esta factura?');">
+            Borrar
+        </button>
+    </form>
+</body>
+</html>
